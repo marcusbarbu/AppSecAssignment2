@@ -8,6 +8,8 @@ Assignment 2
 
 # Design
 
+Code is available at [https://github.com/marcusbarbu/AppSecAssignment2.git](https://github.com/marcusbarbu/AppSecAssignment2.git).
+
 In order to create the most secure webapp possible, a number of omissions were made in the name of security and simplicity.
 The web app does not use a server for logins, users are an instance of a `User` object that contains their username,
 phone-number for two-factor-authentication, and a `sha256` hash of their password.
