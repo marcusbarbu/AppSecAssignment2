@@ -26,12 +26,12 @@ def index():
 def registration():
     global users
     if not 'nonce' in session:
-        session['nonce'] = hashlib.md5(str(random.randint(0,0xFFFFFFF)).encode('ascii')).hexdigest()
-    csrf_token = hashlib.md5(session['nonce'].encode('ascii')).hexdigest()
+        session['nonce'] = hashlib.sha256(str(random.randint(0,0xFFFFFFF)).encode('ascii')).hexdigest()
+    csrf_token = hashlib.sha256(session['nonce'].encode('ascii')).hexdigest()
     if request.method == "POST":
         if not (request.form['uname'] and request.form['pword'] and request.form['2fa']):
             return render_template('register.html', csrf_token=csrf_token, reg_success=False)
-        if hashlib.md5(session['nonce'].encode('ascii')).hexdigest() != request.form['csrf']:
+        if hashlib.sha256(session['nonce'].encode('ascii')).hexdigest() != request.form['csrf']:
             return render_template('register.html', csrf_token=csrf_token, reg_success=False)
         if request.form['uname'] in users.keys():
             return render_template('register.html', csrf_token=csrf_token, reg_success=False)
@@ -45,9 +45,9 @@ def registration():
 def login():
     global users, valid_sessions
     if not 'nonce' in session:
-        session['nonce'] = hashlib.md5(str(random.randint(0,0xFFFFFFF)).encode('ascii')).hexdigest()
+        session['nonce'] = hashlib.sha256(str(random.randint(0,0xFFFFFFF)).encode('ascii')).hexdigest()
 
-    csrf_token = hashlib.md5(session['nonce'].encode('ascii')).hexdigest()
+    csrf_token = hashlib.sha256(session['nonce'].encode('ascii')).hexdigest()
     if request.method == 'GET':
         return render_template("login.html", csrf_token=csrf_token)
 
@@ -79,7 +79,7 @@ def spell_check():
     ses = session['token'] + session['nonce']
     if not ses in valid_sessions:
         return redirect(url_for('login'))
-    csrf_token = hashlib.md5(session['nonce'].encode('ascii')).hexdigest()
+    csrf_token = hashlib.sha256(session['nonce'].encode('ascii')).hexdigest()
 
     if request.method == "GET":
         return render_template("spell_check.html",csrf_token=csrf_token)
